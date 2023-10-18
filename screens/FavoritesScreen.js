@@ -1,35 +1,41 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { removeFromFavorites } from '../store/favoriteSlice.js';
+import { View, Text, StyleSheet,FlatList} from 'react-native';
+import { useSelector } from 'react-redux';
+import FavoriteRecipe from '../components/FavoriteRecipe/FavoriteRecipe';
 const FavoritesScreen = () => {
   const favorites = useSelector((state) => state.favorites);
-  const dispatch = useDispatch();
-
-  const removeFromFavorite = (recipe) => {
-    dispatch(removeFromFavorites(recipe));
-  };
-
   return (
     <View style={styles.container}>
-      <Text>Favorites Screen</Text>
-      <View>
-        {favorites.map((recipe) => (
-          <View key={recipe.id}>
-            <Text>{recipe.strMeal}</Text>
-            <Button title="Remove" onPress={() => removeFromFavorite(recipe)} />
-          </View>
-        ))}
-      </View>
+      <Text style={styles.heading}>Recipes</Text>
+      <FlatList
+        data={favorites}
+        numColumns={2}
+        renderItem={({ item }) => {
+          return <FavoriteRecipe recipe={item} />;
+        }}
+        keyExtractor={(item) => item.idMeal}
+        style={styles.recipeList}
+        columnWrapperStyle={styles.recipeListColumnWrapper}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: 16,
+    gap: 20,
+  },
+  heading: {
+    fontWeight: "600",
+    fontSize: 20,
+  },
+  recipeList: {
+    gap: 18,
+  },
+  recipeListColumnWrapper: {
+    justifyContent: "space-between",
+    gap: 12,
   },
 });
 

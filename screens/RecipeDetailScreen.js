@@ -69,13 +69,13 @@ const RecipeDetailScreen = ({ route }) => {
     const dispatch = useDispatch();
     const favorites = useSelector((state) => state.favorites);
     const handleAddBookmark = () => {
-        if (isFavorite) {
-          dispatch(removeFromFavorites(recipe)); 
-        } else {
-          dispatch(addToFavorites(recipe));
+            if (isFavorite) {
+                dispatch(removeFromFavorites(recipe)); 
+              } else {
+                dispatch(addToFavorites(recipe));
+                setIsFavorite(!isFavorite); 
+              }
         }
-        setIsFavorite(!isFavorite); 
-      };
     useEffect(() => {
         (async () => {
             const res = await getRecipeById(route.params.recipeId);
