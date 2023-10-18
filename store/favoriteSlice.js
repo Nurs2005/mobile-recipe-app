@@ -1,19 +1,18 @@
-export const favoriteSlice = recipe => dispatch => {
-    dispatch({
-      type: ADD_TO_FAVORITE,
-      payload: recipe
-    });
-  };
-  const initialState = {
-    recipes: []
-  };
-  function recipesReducer(state = initialState, action) {
-    switch (action.type) {
-      case ADD_TO_BOOKMARK_LIST:
-        return { ...state, recipes: [...state.recipes, action.payload] };
-      default:
-        return state;
-    }
-  }
-  
-  export default recipesReducer;
+import { createSlice } from '@reduxjs/toolkit';
+
+const favoriteSlice = createSlice({
+  name: 'favorites',
+  initialState: [],
+  reducers: {
+    addToFavorites: (state, action) => {
+      state.push(action.payload);
+    },
+    removeFromFavorites: (state, action) => {
+      return state.filter((recipe) => recipe.id !== action.payload.id);
+    },
+  },
+});
+
+export const { addToFavorites, removeFromFavorites } = favoriteSlice.actions;
+
+export default favoriteSlice.reducer;

@@ -14,12 +14,11 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import AdditionaRecipeDataCard from '../components/AdditionaRecipeDataCard/AdditionaRecipeDataCard';
 import Ingredients from '../components/Ingredients/Ingredients';
-import VideoInstruction from '../components/VideoInstruction/VideoInstruction';
 import { useNavigation } from '@react-navigation/native';
 import { useState, useEffect } from 'react';
 import { getRecipeById } from '../lib/getRecipeById';
-import {favoriteSlice} from '../store/favoriteSlice'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToFavorites, removeFromFavorites } from '../store/favoriteSlice';
 const additionalData = [
     {
         title: '35',
@@ -68,23 +67,25 @@ const RecipeDetailScreen = ({ route }) => {
     const [isFavorite, setIsFavorite] = useState(false);
     const [recipe, setRecipe] = useState(null);
     const dispatch = useDispatch();
-    const {recipes} =  useSelector(state => state.recipesReducer)
-    const addFavorite = recipe => dispatch(favoriteSlice(recipe))
-    const handleAddBookmark = recipe => {
-        setIsFavorite(!isFavorite)
-        addFavorite(recipe);
+    const favorites = useSelector((state) => state.favorites);
+    const handleAddBookmark = () => {
+        if (isFavorite) {
+          dispatch(removeFromFavorites(recipe)); 
+        } else {
+          dispatch(addToFavorites(recipe));
+        }
+        setIsFavorite(!isFavorite); 
       };
     useEffect(() => {
         (async () => {
             const res = await getRecipeById(route.params.recipeId);
             setRecipe(res.meals[0]);
         })();
-    }, []);
+    }, [route.params.recipeId]);    
 
     if (!recipe) {
         return <ActivityIndicator />;
     }
-
     return (
         <ScrollView style={styles.container}>
             <SafeAreaView style={styles.header}>
@@ -98,7 +99,7 @@ const RecipeDetailScreen = ({ route }) => {
                     />
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={handleAddBookmark(recipe)}
+                    onPress={handleAddBookmark} 
                     style={styles.headerIcon}
                 >
                     <Ionicons
