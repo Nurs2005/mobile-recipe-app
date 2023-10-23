@@ -12,15 +12,19 @@ const Recipes = ({ inputText }) => {
   const recipes = useSelector((state) => state.recipes.recipes);
   const recipesLoaded = useSelector((state) => state.recipes.loaded);
   const dispatch = useDispatch();
+  const [pageRendered, setPageRendered] = useState(0);
+  useEffect(() => {
+    setPageRendered(pageRendered + 1);
+  }, []);
 
   useEffect(() => {
     setShowingRecipes(recipes);
   }, [recipes]);
-
   useEffect(() => {
-    dispatch(fetchRecipes(activeCategory));
+    if (activeCategory && pageRendered > 0 && recipesLoaded) {
+      dispatch(fetchRecipes(activeCategory));
+    }
   }, [activeCategory]);
-
   useEffect(() => {
     if (inputText.trim() !== "" && recipes.length > 0) {
       const newShowingRecipes = recipes.filter((recipe) => {
