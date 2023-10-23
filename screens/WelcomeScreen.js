@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCategories } from "../store/categoriesSlice";
 import { fetchRecipes } from "../store/recipesSlice";
-
+import {loadFavoritesFromAsyncStorage} from '../store/favoriteSlice'
 const WelcomeScreen = ({ navigation }) => {
   const ringOnePadding = useSharedValue(0);
   const ringTwoPadding = useSharedValue(0);
@@ -18,7 +18,6 @@ const WelcomeScreen = ({ navigation }) => {
   );
 
   const dispatch = useDispatch();
-
   useEffect(() => {
     setTimeout(() => {
       ringOnePadding.value = withSpring(35);
@@ -26,7 +25,9 @@ const WelcomeScreen = ({ navigation }) => {
       dispatch(fetchCategories());
     }, 2000);
   }, []);
-
+  useEffect(() => {
+    dispatch(loadFavoritesFromAsyncStorage());
+  }, []);
   useEffect(() => {
     if (activeCategory) {
       dispatch(fetchRecipes(activeCategory));

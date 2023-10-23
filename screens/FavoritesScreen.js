@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet,FlatList} from 'react-native';
-import { useSelector } from 'react-redux';
-import FavoriteRecipe from '../components/FavoriteRecipe/FavoriteRecipe';
+import React from "react";
+import { View, Text, StyleSheet, FlatList } from "react-native";
+import { useSelector } from "react-redux";
+import FavoriteRecipe from "../components/FavoriteRecipe/FavoriteRecipe";
 const FavoritesScreen = () => {
   const favorites = useSelector((state) => state.favorites);
   return (
@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 16,
     gap: 20,
+    padding:10
   },
   heading: {
     fontWeight: "600",
